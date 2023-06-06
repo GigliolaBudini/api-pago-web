@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:p1="urn:meds.cl:webpay:pagocliente" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" name="SI_os_TransaccionSAPCreate" targetNamespace="urn:meds.cl:webpay:pagocliente" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation />
+  <wsp:UsingPolicy wsdl:required="true" />
+  <wsp:Policy wsu:Id="OP_enviaPago" />
+  <wsdl:types>
+    <xsd:schema xmlns="urn:meds.cl:webpay:pagocliente" targetNamespace="urn:meds.cl:webpay:pagocliente" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:element name="MT_TransaccionSAPCreateRes" type="p1:DT_TransacWebResp" />
+      <xsd:element name="MT_TransaccionSAPCreateReq" type="p1:DT_TransacWeb" />
+      <xsd:complexType name="DT_TransacWeb">
+        <xsd:annotation>
+          <xsd:appinfo source="http://sap.com/xi/VersionID">a35b51bdca5b11e889cb00000063df62</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="transaccion">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">2c4a866d82de11e8b47d005056a2001b</xsd:appinfo>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="sociedad" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">2c4a741882de11e8a9cb005056a2001b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="codprestacion" type="xsd:string" />
+                <xsd:element name="nrodocumento" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">2c4a741982de11e8bd72005056a2001b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="ejercicio" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">2c4a741a82de11e89cd2005056a2001b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="posicion" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">2c4a741b82de11e8ad8c005056a2001b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="buyOrder" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">2c4a741c82de11e8ca9b005056a2001b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="sessionId" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">2c4a741d82de11e8850e005056a2001b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="accoutingDate" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">2c4a741e82de11e8bdba005056a2001b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="transactionDate" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">2c4a741f82de11e89a89005056a2001b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="VCI" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">2c4a742082de11e88377005056a2001b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="urlRedirection" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">2c4a742182de11e8cc94005056a2001b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="cardNumber" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">2c4a742282de11e8b8c3005056a2001b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="cardExpirationDate" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">2c4a742382de11e8a672005056a2001b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="authorizationCode" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">2c4a742482de11e8c380005056a2001b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="paymentTypeCode" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">2c4a742582de11e8875e005056a2001b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="responseCode" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">2c4a866982de11e8cfc6005056a2001b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="Amount" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">2c4a866a82de11e8b3ed005056a2001b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="sharesNumber" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">2c4a866b82de11e8aa96005056a2001b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="commerceCode" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">2c4a866c82de11e8c1d8005056a2001b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="DT_TransacWebResp">
+        <xsd:annotation>
+          <xsd:appinfo source="http://sap.com/xi/VersionID">7a16bdd1830511e892a300000063df62</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="transaccionsap">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">72e45de582ec11e89d9a005056a2001b</xsd:appinfo>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="estado" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">72e44c9d82ec11e88e5f005056a2001b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="mensaje" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">72e45de282ec11e8b6c2005056a2001b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="buyOrder" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">72e45de382ec11e8cdd8005056a2001b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="sessionId" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">72e45de482ec11e8a1db005056a2001b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element minOccurs="0" name="dte">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">a15bdd95830511e88afc005056a2001b</xsd:appinfo>
+                  </xsd:annotation>
+                  <xsd:complexType>
+                    <xsd:sequence>
+                      <xsd:element minOccurs="0" name="nroboleta" type="xsd:string">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">a15bdd92830511e8b124005056a2001b</xsd:appinfo>
+                        </xsd:annotation>
+                      </xsd:element>
+                      <xsd:element minOccurs="0" name="monto" type="xsd:string">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">a15bdd93830511e89b2c005056a2001b</xsd:appinfo>
+                        </xsd:annotation>
+                      </xsd:element>
+                      <xsd:element minOccurs="0" name="sociedad" type="xsd:string">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">a15bdd94830511e8987d005056a2001b</xsd:appinfo>
+                        </xsd:annotation>
+                      </xsd:element>
+                    </xsd:sequence>
+                  </xsd:complexType>
+                </xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="MT_TransaccionSAPCreateReq">
+    <wsdl:documentation />
+    <wsdl:part name="MT_TransaccionSAPCreateReq" element="p1:MT_TransaccionSAPCreateReq" />
+  </wsdl:message>
+  <wsdl:message name="MT_TransaccionSAPCreateRes">
+    <wsdl:documentation />
+    <wsdl:part name="MT_TransaccionSAPCreateRes" element="p1:MT_TransaccionSAPCreateRes" />
+  </wsdl:message>
+  <wsdl:portType name="SI_os_TransaccionSAPCreate">
+    <wsdl:documentation />
+    <wsdl:operation name="enviaPago">
+      <wsdl:documentation />
+      <wsp:Policy>
+        <wsp:PolicyReference URI="#OP_enviaPago" />
+      </wsp:Policy>
+      <wsdl:input message="p1:MT_TransaccionSAPCreateReq" />
+      <wsdl:output message="p1:MT_TransaccionSAPCreateRes" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SI_os_TransaccionSAPCreateBinding" type="p1:SI_os_TransaccionSAPCreate">
+    <binding transport="http://schemas.xmlsoap.org/soap/http" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+    <wsdl:operation name="enviaPago">
+      <operation soapAction="http://sap.com/xi/WebService/soap1.1" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <body use="literal" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <body use="literal" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SI_os_TransaccionSAPCreateService">
+    <wsdl:port name="HTTP_Port" binding="p1:SI_os_TransaccionSAPCreateBinding">
+      <address location="http://medqlcinmxq.sap.meds.cl:50000/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=BC_WEBPAY&amp;receiverParty=&amp;receiverService=&amp;interface=SI_os_TransaccionSAPCreate&amp;interfaceNamespace=urn%3Ameds.cl%3Awebpay%3Apagocliente" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+    </wsdl:port>
+    <wsdl:port name="HTTPS_Port" binding="p1:SI_os_TransaccionSAPCreateBinding">
+      <address location="https://medqlcinmxq.sap.meds.cl:50001/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=BC_WEBPAY&amp;receiverParty=&amp;receiverService=&amp;interface=SI_os_TransaccionSAPCreate&amp;interfaceNamespace=urn%3Ameds.cl%3Awebpay%3Apagocliente" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

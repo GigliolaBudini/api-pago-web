@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:p1="urn:meds.cl:webpay:pagocliente" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" name="SI_os_PagoEpisodioWebQuery" targetNamespace="urn:meds.cl:webpay:pagocliente" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation />
+  <wsp:UsingPolicy wsdl:required="true" />
+  <wsp:Policy wsu:Id="OP_consultaEpisodio" />
+  <wsdl:types>
+    <xsd:schema xmlns="urn:meds.cl:webpay:pagocliente" targetNamespace="urn:meds.cl:webpay:pagocliente" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:element name="MT_PagoWebResQuery" type="p1:DT_Pagos" />
+      <xsd:element name="MT_PagoWebReqQuery" type="p1:DT_Paciente" />
+      <xsd:complexType name="DT_Pagos">
+        <xsd:annotation>
+          <xsd:appinfo source="http://sap.com/xi/VersionID">25ba23b1a89611e8aaf800000063df62</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="proceso">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">9b5d378c681a11e88040005056a2001b</xsd:appinfo>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="estado" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">9b5d378a681a11e8a5a4005056a2001b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="mensaje" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">9b5d378b681a11e88184005056a2001b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="pago">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">9b5d378d681a11e8a3b7005056a2001b</xsd:appinfo>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="rutpaciente" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">2878794570eb11e8bca6005056a2001b</xsd:appinfo>
+                    <xsd:documentation>Visible web: Rut</xsd:documentation>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="nombrepaciente" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">2878794670eb11e8ae97005056a2001b</xsd:appinfo>
+                    <xsd:documentation>Visible web: Nombre</xsd:documentation>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element minOccurs="0" name="correo" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">0e17141c93ec11e88db2005056a2001b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="codcirugia" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">76306dce681a11e8ba17005056a2001b</xsd:appinfo>
+                    <xsd:documentation>Visible web: Codigo
+                                            Cirugia</xsd:documentation>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="nomcirugia" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">76306dcf681a11e8805f005056a2001b</xsd:appinfo>
+                    <xsd:documentation>Visible web: Nombre
+                                            Cirugia</xsd:documentation>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="estadocuenta" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">76306dd0681a11e8afc6005056a2001b</xsd:appinfo>
+                    <xsd:documentation>Visible web: Estado
+                                            Cuenta</xsd:documentation>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="monto" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">76306dd1681a11e88c75005056a2001b</xsd:appinfo>
+                    <xsd:documentation>Visible web: Monto a
+                                            Pagar</xsd:documentation>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="fechavencimiento" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">2878794770eb11e896b8005056a2001b</xsd:appinfo>
+                    <xsd:documentation>Visible web: Fecha
+                                            Vencimiento</xsd:documentation>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="sociedad" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">76306dd2681a11e8c98a005056a2001b</xsd:appinfo>
+                    <xsd:documentation>NO Visible web:
+                                            Sociedad</xsd:documentation>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="nrodocumento" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">76306dd3681a11e89a2b005056a2001b</xsd:appinfo>
+                    <xsd:documentation>NO Visible web: Numero Documento
+                                            Contable</xsd:documentation>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="ejercicio" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">76306dd4681a11e8b683005056a2001b</xsd:appinfo>
+                    <xsd:documentation>NO Visible web:
+                                            Ejercicio</xsd:documentation>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="posicion" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">76306dd5681a11e8bc96005056a2001b</xsd:appinfo>
+                    <xsd:documentation>NO Visible web: Posicion Asiento
+                                            Contable</xsd:documentation>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="moneda" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">4c7221e2821311e8aeaa005056a2001b</xsd:appinfo>
+                    <xsd:documentation>Visible</xsd:documentation>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="tipoprestacion" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">a17f21e033d811e9b3d8005056a2001b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="doctoBase64" type="xsd:string" />
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="DT_Paciente">
+        <xsd:annotation>
+          <xsd:appinfo source="http://sap.com/xi/VersionID">908450b8681d11e8a26900000063df62</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element name="rut" type="xsd:string" />
+          <xsd:element name="episodio" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="MT_PagoWebReqQuery">
+    <wsdl:documentation />
+    <wsdl:part name="MT_PagoWebReqQuery" element="p1:MT_PagoWebReqQuery" />
+  </wsdl:message>
+  <wsdl:message name="MT_PagoWebResQuery">
+    <wsdl:documentation />
+    <wsdl:part name="MT_PagoWebResQuery" element="p1:MT_PagoWebResQuery" />
+  </wsdl:message>
+  <wsdl:portType name="SI_os_PagoEpisodioWebQuery">
+    <wsdl:documentation />
+    <wsdl:operation name="consultaEpisodio">
+      <wsdl:documentation />
+      <wsp:Policy>
+        <wsp:PolicyReference URI="#OP_consultaEpisodio" />
+      </wsp:Policy>
+      <wsdl:input message="p1:MT_PagoWebReqQuery" />
+      <wsdl:output message="p1:MT_PagoWebResQuery" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SI_os_PagoEpisodioWebQueryBinding" type="p1:SI_os_PagoEpisodioWebQuery">
+    <binding transport="http://schemas.xmlsoap.org/soap/http" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+    <wsdl:operation name="consultaEpisodio">
+      <operation soapAction="http://sap.com/xi/WebService/soap1.1" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <body use="literal" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <body use="literal" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SI_os_PagoEpisodioWebQueryService">
+    <wsdl:port name="HTTP_Port" binding="p1:SI_os_PagoEpisodioWebQueryBinding">
+      <address location="http://medqlcinmxq.sap.meds.cl:50000/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=BC_WEBPAY&amp;receiverParty=&amp;receiverService=&amp;interface=SI_os_PagoEpisodioWebQuery&amp;interfaceNamespace=urn%3Ameds.cl%3Awebpay%3Apagocliente" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+    </wsdl:port>
+    <wsdl:port name="HTTPS_Port" binding="p1:SI_os_PagoEpisodioWebQueryBinding">
+      <address location="https://medqlcinmxq.sap.meds.cl:50001/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=BC_WEBPAY&amp;receiverParty=&amp;receiverService=&amp;interface=SI_os_PagoEpisodioWebQuery&amp;interfaceNamespace=urn%3Ameds.cl%3Awebpay%3Apagocliente" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
