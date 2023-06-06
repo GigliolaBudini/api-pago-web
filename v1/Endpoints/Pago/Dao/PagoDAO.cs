@@ -20,10 +20,15 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using System.IO;
 using Webpay.Transbank.Library;
 using Webpay.Transbank.Library.Wsdl.Mall.Normal;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using Microsoft.Azure;// Namespace for CloudConfigurationManager
+using Microsoft.WindowsAzure.Storage;// Namespace for CloudStorageAccount
+using Microsoft.WindowsAzure.Storage.Queue;
+using System.Net.Mail;
 
 namespace API.EndPoints.Pago.Dao
 { 
@@ -128,15 +133,12 @@ namespace API.EndPoints.Pago.Dao
                     }
                     else
                     {
-                        logger.Info("[ResgitraPagoExternoTransbankAsync] Transbank: Transaccion OK ");
-
-
                         foreach (var extra in datosExtras.Pagos)
                         {
                             //if (extra.CodigoComercio == row.commerceCode)
                                if (extra.NroOrdenCompra == row.buyOrder)
                                 {
-                                logger.Info("Datos a enviar =>  "+ extra);
+                                //logger.Info("Datos a enviar =>  "+ extra);
                                 RegistraPagoWebReference.DT_TransacWebTransaccion lineaRequest = new RegistraPagoWebReference.DT_TransacWebTransaccion();
                                 lineaRequest.posicion = extra.Posicion;
                                 lineaRequest.sociedad = extra.Sociedad;
@@ -166,60 +168,88 @@ namespace API.EndPoints.Pago.Dao
                             }
                         }
 
+                        logger.Info("[RegistraPagoExternoTransbankAsync] Transbank: Transaccion OK ");
 
                     }
-
-
-
                 }
 
                 msgOut.sessionId = result.sessionId;
                 msgOut.transactionDate = result.transactionDate;
                 msgOut.urlRedirection = result.urlRedirection;
                 msgOut.VCI = result.VCI;
-                logger.Info("result.VCI: " + result.VCI);
-                logger.Info("Result: "+ result.ToString());
-                AddRegistroPago("", msgIn.token_ws, "", result.detailOutput[0].amount, msgOut, null);
 
-                
+                // Log registro de datos que se envian a SAP
+                logger.Info("[RegistraPagoExternoTransbankAsync] Token: " + msgIn.token_ws + " Buy order: "+ result.buyOrder.ToString());
+                var mes = "";
+                Array.ForEach(requestArray.ToArray(), (e) => mes += JsonConvert.SerializeObject(e) +',');
+                logger.Info("[RegistraPagoExternoTransbankAsync] SAP request data : [" + mes + "]");
 
 
-                //  result.detailOutput[0].
+                /* Registro de mensage en cola de azure  */
+
+                try
+                {
+                    var data = new
+                    {
+                        token = msgIn.token_ws,
+                        rut = datosExtras.Rut,
+                        data = requestArray
+                    };
+
+
+                    queueMessage(JsonConvert.SerializeObject(data));
+                    logger.Info("[RegistraPagoExternoTransbankAsync] Pagos orden " + result.buyOrder.ToString() + " agregado a cola para envio a SAP ");
+                    AddRegistroPago("", msgIn.token_ws, "", result.detailOutput[0].amount, msgOut, null);
+
+                }
+                catch(Exception e)
+                {
+                    logger.Error("Ocurrio un error al agregar pago orden " + result.buyOrder.ToString() + " a servicio de cola de mensajes");
+                    throw new Exception("Error Queue: " + e.Message);
+                }
+
 
                 /* redireccionamiento automatico */
                 /* validar reglas */
 
 
-                
-                RegistraPagoWebReference.DT_TransacWebRespTransaccionsap[] responseWS = null;
+                /* Modificación 
+                 * Proceso registro en SAP cambiado a ejecutarse en queue service
+                 */
+
+                //RegistraPagoWebReference.DT_TransacWebRespTransaccionsap[] responseWS = null;
 
 
                 /* registra pago SAP */
-                RegistraPagoWebReference.SI_os_TransaccionSAPCreateService client = new RegistraPagoWebReference.SI_os_TransaccionSAPCreateService();
-                client.Credentials = new NetworkCredential(System.Configuration.ConfigurationManager.AppSettings["Servicio.PagoWeb.Usuario"], System.Configuration.ConfigurationManager.AppSettings["Servicio.PagoWeb.Password"]);
-                 logger.Info("Request array: "+ requestArray.ToString());
-                try
-                {
-                    responseWS=client.enviaPago(requestArray.ToArray());
+                //RegistraPagoWebReference.SI_os_TransaccionSAPCreateService client = new RegistraPagoWebReference.SI_os_TransaccionSAPCreateService();
+                //client.Credentials = new NetworkCredential(System.Configuration.ConfigurationManager.AppSettings["Servicio.PagoWeb.Usuario"], System.Configuration.ConfigurationManager.AppSettings["Servicio.PagoWeb.Password"]);
 
-                    logger.Info("Registrado en SAP");
-                    //webpay.getMallNormalTransaction().acknowledgeTransaction(msgIn.token_ws);
-                    logger.Info("Confirmado en Trasnabank");
-                    log.AddLogPago(msgIn.token_ws, "", "", "", 0, DateTime.Now, 1, "");
-                }
-                catch (Exception e)
-                {
+                //try
+                //{
+                //responseWS=client.enviaPago(requestArray.ToArray());
 
-                    logger.Error("Error SAP: " + e.Message);
-                    //logger.Error("Sin Confirmar en Tranbank...");
-                    throw new Exception("Error SAP: " + e.Message);
-                }
+                /* Nuevo flujo con cola de mensaje en Azure */
+
+
+
+
+                // logger.Info("Registrado en SAP, Confirmado en Transbank ");
+                //webpay.getMallNormalTransaction().acknowledgeTransaction(msgIn.token_ws);
+                log.AddLogPago(msgIn.token_ws, "", "", "", 0, DateTime.Now, 1, "");
+                //}
+                //catch (Exception e)
+                //{
+
+                    //logger.Error("Error SAP: " + e.Message);
+                   // logger.Error("Sin Confirmar en Tranbank");
+                   // throw new Exception("Error SAP: " + e.Message);
+               // }
                 
                 /* CONFRIMA TRANSACCION  TBK */
              
-                
-    
-                
+                /*
+                 * Siguiente paso se omite en nuevo flujo con API pasarela de pago
+                 */
                 HttpResponse response_http = HttpContext.Current.Response;
                 response_http.Clear();
                 StringBuilder s = new StringBuilder();
@@ -650,7 +680,11 @@ namespace API.EndPoints.Pago.Dao
             public List<DetailResponseContent> transactionDetail { get; set; }
 
         }
+        [JsonObject]
+        public class QueueMessge
+        {
 
+        }
         [JsonObject]
         public class PagosJson
         {
@@ -766,10 +800,113 @@ namespace API.EndPoints.Pago.Dao
                 }
                 catch (ArgumentNullException a)
                 {
-                    logger.Info("[PagoDAO] Response nueva pasarela de pago: " + a.Message);
+                    logger.Info("[PagoDAO] Response nueva pasarela de pago: " + a.Message.ToString());
                     throw new Exception(a.Message);
 
                 }
+            }
+        }
+
+        private async Task queueMessage(object datos)
+        {
+            try{ /* Conect to the queue acount */
+                var accessKey = System.Configuration.ConfigurationManager.AppSettings["StorageConnectionManager"];
+                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(accessKey);
+
+                // Create the queue client
+                var queueName = "sap-requests";
+                CloudQueueClient queueClient = storageAccount.CreateCloudQueueClient();
+
+                // Retrieve a reference to a queue
+                CloudQueue queue = queueClient.GetQueueReference("sap-request");
+
+
+                // Create the queue if it doesn't already exist
+                await queue.CreateIfNotExistsAsync();
+
+                /*Add message to the queue*/
+                var data = "[" + datos + "]";
+                CloudQueueMessage message = new CloudQueueMessage(data);
+                await queue.AddMessageAsync(message, null, null, null, null);
+
+                //CloudQueueMessage peekedMessage = queue.PeekMessageAsync().Result;
+                // Display message
+                //Console.WriteLine(peekedMessage.AsString);
+            }
+            catch (Exception e)
+            {
+                logger.Info(e.Message);
+            }
+        }
+
+        public void Emailclient(int intents, string items, string token)
+        {
+            NetworkCredential networkCredential = new NetworkCredential(
+                System.Configuration.ConfigurationManager.AppSettings["usernamec"],
+                System.Configuration.ConfigurationManager.AppSettings["passwordc"]);//prod
+            MailAddress mailAddress = new MailAddress(System.Configuration.ConfigurationManager.AppSettings["usernamec"], "MEDS Pago de Cuentas", System.Text.Encoding.UTF8);
+            String correo1 = System.Configuration.ConfigurationManager.AppSettings["correo2c"];
+            String correo2 = System.Configuration.ConfigurationManager.AppSettings["correo2c"];
+            String correo3 = System.Configuration.ConfigurationManager.AppSettings["correo3c"];
+            //String correo4 = System.Configuration.ConfigurationManager.AppSettings["correo4t"];
+            if (System.Configuration.ConfigurationManager.AppSettings["ambiente"] == "desarrollo" || System.Configuration.ConfigurationManager.AppSettings["ambiente"] == "pre")
+            {
+                networkCredential = new NetworkCredential(System.Configuration.ConfigurationManager.AppSettings["usernametest"], System.Configuration.ConfigurationManager.AppSettings["passwordtest"]);//prod
+                mailAddress = new MailAddress(System.Configuration.ConfigurationManager.AppSettings["usernametest"], "MEDS Pago de Cuentas test", System.Text.Encoding.UTF8);
+                correo1 = System.Configuration.ConfigurationManager.AppSettings["correo1test"];//teledata.correo.Trim(); //System.Configuration.ConfigurationManager.AppSettings["correo1test"];
+                correo2 = System.Configuration.ConfigurationManager.AppSettings["correo2test"];
+                correo3 = System.Configuration.ConfigurationManager.AppSettings["correo3test"];
+                //correo4 = System.Configuration.ConfigurationManager.AppSettings["correo4test"];
+            }
+            //_log_.Debug("Emailclient");
+
+            //string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"EmailTemplate\QueueError.html");
+            //StreamReader str = new StreamReader(path);
+            //string MailText = str.ReadToEnd();
+            //str.Close();
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"EmailTemplate\QueueError.html");
+            StreamReader str = new StreamReader(path);
+            string MailText = str.ReadToEnd();
+            str.Close();
+            //string pagotipo = "";//datawebpay.Monto;
+
+            //string pop = string.Format("{0:C}", Convert.ToDecimal(pagotipo.Replace(".0","")));
+
+            //string pathbonoa = "Bono: < a href = '" + pathbono + "' > Descargar </ a >";
+            MailText = MailText.Replace("[token]", token);
+            MailText = MailText.Replace("[jsonItems]", items);
+            //MailText2 = MailText2.Replace("[duracion]", TimeSpan.FromMinutes(Convert.ToDouble(teledata.duracion)).ToString());
+            //MailText2 = MailText2.Replace("[correopaciente]", teledata.correopaciente);
+            //MailText2 = MailText2.Replace("[idcita]", teledata.idcita);
+          
+            //MailText2 = MailText2.Replace("[bono]", pathbonoa);
+
+      
+            MailMessage msg = new MailMessage();
+            msg.To.Add(correo1);msg.To.Add(correo2);msg.To.Add(correo3);
+            msg.IsBodyHtml = true;
+            msg.From = mailAddress;
+            msg.Subject = "Error servicio Queues";
+            msg.SubjectEncoding = System.Text.Encoding.UTF8;
+            msg.Body = MailText;
+            //msg.Attachments.Add(new Attachment("C:\\archivo.pdf")); adjuntar archivo
+            msg.BodyEncoding = System.Text.Encoding.UTF8;
+            try
+            {
+                //datatelemedicina data = db.datatelemedicina.Find(teledata.id_session);
+  
+                SmtpClient client = new SmtpClient();
+                client.Credentials = networkCredential;
+                client.Port = 587;//puerto que utiliza mail para mandar correos
+                client.Host = "smtp.office365.com";
+                client.EnableSsl = true; //Esto es para que vaya a través de SSL que es obligatorio con Mail
+                client.Send(msg);
+                //client2.SendCompleted += new SendCompletedEventHandler(SendCompletedCallback);
+            }
+            catch (Exception ex)
+            {
+                //Emailerror("error envio correo </ br>" + ex.StackTrace.ToString());
+                //_log_.Debug(ex.Message.ToString());
             }
         }
 

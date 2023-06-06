@@ -7,6 +7,7 @@ namespace API.EndPoints.Pago
     [EnableCors("*", "*", "*")]
     public class PagoController : Gale.REST.RestController
     {
+       
 
         [HttpPost]
         [HierarchicalRoute("consultaEstadoPago")]

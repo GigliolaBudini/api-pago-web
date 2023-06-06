@@ -20,7 +20,7 @@ namespace API.EndPoints.PagoCuentas
 
         [HttpGet]
         [HierarchicalRoute("{rut}/{codigo}")]
-        public IHttpActionResult  CosnultaDocumentos(string rut, string codigo)
+        public IHttpActionResult  ConsultaDocumentos(string rut, string codigo)
         {
             Vo.GetCuentasIn msgIn = new Vo.GetCuentasIn();
             msgIn.Codigo  = codigo;

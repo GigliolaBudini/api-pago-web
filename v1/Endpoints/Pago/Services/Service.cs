@@ -6,10 +6,6 @@ using System.Web.UI.WebControls;
 
 namespace API.EndPoints.Pago.Services
 {
-
-
-
-
     public class ConsultaEstadoTransaccion : Gale.REST.Http.HttpCreateActionResult<Vo.TransactionResultIn>
     {
         public ConsultaEstadoTransaccion(Vo.TransactionResultIn model) : base(model)
