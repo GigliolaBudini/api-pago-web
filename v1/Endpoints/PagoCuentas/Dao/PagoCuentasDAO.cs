@@ -82,13 +82,15 @@ namespace API.EndPoints.PagoCuentas.Dao
                         {
                             if(msgOut.cirugias==null)
                                 msgOut.cirugias = new List<Vo.Cirugias>();
-
+                           
+                            // Modificación 5/7/2023 se le restan 20 días a la fecha de vencimiento 
+                            string shortdate = substractDays(linea.fechavencimiento); 
                             Vo.Cirugias cuenta = new Vo.Cirugias();
                             cuenta.Codcirugia = linea.codcirugia;
                             cuenta.Id = i;
                             cuenta.Ejercicio = linea.ejercicio;
                             cuenta.Estadocuenta = linea.estadocuenta;
-                            cuenta.Fechavencimiento = linea.fechavencimiento;
+                            cuenta.Fechavencimiento = shortdate;
                             cuenta.Monto = linea.monto;
                             cuenta.Nomcirugia = linea.nomcirugia;
                             cuenta.Nrodocumento = linea.nrodocumento;
@@ -111,7 +113,29 @@ namespace API.EndPoints.PagoCuentas.Dao
             return msgOut;
 		}
 
+        public string addCero(int num)
+        {
+            if (num < 10)
+            {
+                return "0" + num.ToString();
+            }
+            else
+            {
+                return num.ToString();
+            }
 
+        }
+
+        public string substractDays(string date)
+        {
+            string year = date.Substring(0, 4);
+            string month = date.Substring(4, 2);
+            string day = date.Substring(6, 2);
+            DateTime newdate = Convert.ToDateTime(year + "-" + month + "-" + day);
+            newdate = newdate.AddDays(-20);
+
+            return newdate.Year.ToString() + addCero(newdate.Month) + addCero(newdate.Day);
+        }
 
 	}
 }
