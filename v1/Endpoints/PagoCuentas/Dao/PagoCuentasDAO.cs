@@ -128,13 +128,27 @@ namespace API.EndPoints.PagoCuentas.Dao
 
         public string substractDays(string date)
         {
-            string year = date.Substring(0, 4);
-            string month = date.Substring(4, 2);
-            string day = date.Substring(6, 2);
-            DateTime newdate = Convert.ToDateTime(year + "-" + month + "-" + day);
-            newdate = newdate.AddDays(-20);
+            DateTime newdate;
+            string year, month, day;
+            if (date.IndexOf("/") != -1)
+            {
+                var arrDate = date.Split('/');
 
-            return newdate.Year.ToString() + addCero(newdate.Month) + addCero(newdate.Day);
+                year = arrDate[2];
+                month = arrDate[1];
+                day = arrDate[0];
+            } 
+            else
+            {
+                year = date.Substring(0, 4);
+                month = date.Substring(4, 2);
+                day = date.Substring(6, 2);
+            }
+            newdate = Convert.ToDateTime(year + "-" + month + "-" + day);
+            newdate = newdate.AddDays(-20);
+            return addCero(newdate.Day) + "/" + addCero(newdate.Month) + "/" + newdate.Year.ToString();
+
+
         }
 
 	}
